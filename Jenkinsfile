@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        DOCKER_IMAGE = 'musaele_1/nodeapp' // Define your DockerHub username and image name
+        DOCKER_IMAGE = 'musaele1/nodeapp' // Define your DockerHub username and image name
         DOCKER_TAG = "${DOCKER_IMAGE}:${env.BUILD_NUMBER}" // Tagging the image with Jenkins build number
     }
     
