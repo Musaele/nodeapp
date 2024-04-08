@@ -27,5 +27,16 @@ pipeline {
                 }
             }
         }
+        
+        stage('Deploy to Kubernetes') {
+            steps {
+                // Deploy the application to Kubernetes
+                kubernetesDeploy(
+                    kubeconfigId: 'kubernetes', // ID of the Kubernetes credentials
+                    configs: '~/deployment.yml', // Path to the Kubernetes deployment YAML
+                    enableConfigSubstitution: false
+                )
+            }
+        }
     }
 }
