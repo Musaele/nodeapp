@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'musaele1/nodeapp' // Define your DockerHub username and image name
         DOCKER_TAG = "${DOCKER_IMAGE}:${env.BUILD_NUMBER}" // Tagging the image with Jenkins build number
+        CONTAINER_NAME = 'todo-node-app'
     }
     
     stages {
@@ -36,6 +37,21 @@ pipeline {
                     configs: '~/deployment.yml', // Path to the Kubernetes deployment YAML
                     enableConfigSubstitution: false
                 )
+            }
+        }
+        
+        stage('Stop and Remove Existing Container') {
+            steps {
+                // Stop and remove the existing container
+                sh "docker stop ${CONTAINER_NAME} || true"
+                sh "docker rm ${CONTAINER_NAME} || true"
+            }
+        }
+        
+        stage('Run New Container') {
+            steps {
+                // Run the new container
+                sh "docker run -d --name ${CONTAINER_NAME} -p 8000:8000 ${DOCKER_TAG}"
             }
         }
     }
