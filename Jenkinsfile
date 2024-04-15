@@ -34,7 +34,9 @@ pipeline {
             steps {
                 script {
                     // Apply Kubernetes Deployment YAML
-                    sh "kubectl apply -f ${KUBE_DEPLOYMENT_YAML}"
+                    withCredentials([file(credentialsId: 'Kubernetes', variable: 'KUBE_CONFIG')]) {
+                        sh "kubectl apply -f ${KUBE_DEPLOYMENT_YAML} --kubeconfig=${KUBE_CONFIG}"
+                    }
                 }
             }
         }
