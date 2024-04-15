@@ -31,27 +31,10 @@ pipeline {
         
         stage('Deploy to Kubernetes') {
             steps {
-                // Deploy the application to Kubernetes
-                kubernetesDeploy(
-                    kubeconfigId: 'kubernetes', // ID of the Kubernetes credentials
-                    configs: '~/deployment.yml', // Path to the Kubernetes deployment YAML
-                    enableConfigSubstitution: false
-                )
-            }
-        }
-        
-        stage('Stop and Remove Existing Container') {
-            steps {
-                // Stop and remove the existing container
-                sh "docker stop ${CONTAINER_NAME} || true"
-                sh "docker rm ${CONTAINER_NAME} || true"
-            }
-        }
-        
-        stage('Run New Container') {
-            steps {
-                // Run the new container
-                sh "docker run -d --name ${CONTAINER_NAME} -p 8000:8000 ${DOCKER_TAG}"
+                script {
+                    // Apply Kubernetes Deployment YAML
+                    sh "kubectl apply -f deployment.yaml"
+                }
             }
         }
     }
