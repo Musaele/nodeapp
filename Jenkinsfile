@@ -5,6 +5,7 @@ pipeline {
         DOCKER_IMAGE = 'musaele1/nodeapp' // Define your DockerHub username and image name
         DOCKER_TAG = "${DOCKER_IMAGE}:${env.BUILD_NUMBER}" // Tagging the image with Jenkins build number
         CONTAINER_NAME = 'todo-node-app'
+        KUBE_DEPLOYMENT_YAML = 'deployment.yml' // Path to your Kubernetes Deployment YAML file
     }
     
     stages {
@@ -33,7 +34,7 @@ pipeline {
             steps {
                 script {
                     // Apply Kubernetes Deployment YAML
-                    sh "kubectl apply -f deployment.yaml"
+                    sh "kubectl apply -f ${KUBE_DEPLOYMENT_YAML}"
                 }
             }
         }
