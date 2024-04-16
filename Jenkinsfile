@@ -35,10 +35,11 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // Apply Kubernetes Deployment YAML
-                    withCredentials([file(credentialsId: 'Kubernetes', variable: 'KUBE_CONFIG')]) {
-                        sh "kubectl apply -f ${KUBE_DEPLOYMENT_YAML} --kubeconfig=${KUBE_CONFIG}"
-                    }
+                    // Ensure MicroK8s is running
+                    sh 'sudo microk8s start'
+                    
+                    // Apply Kubernetes Deployment YAML with MicroK8s
+                    sh 'sudo microk8s kubectl apply -f ${KUBE_DEPLOYMENT_YAML}'
                 }
             }
         }
